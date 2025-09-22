@@ -1,0 +1,28 @@
+=== Simulation Log (20250922_201013) ===
+Basic parameters: time=400, ts=0.005, omega=15.708, wav=0.7
+Robust params: rho=0.101, sig=0.001
+
+[Generator] A0=
+         0    1.0000
+   -1.0000   -1.4000
+
+[Generator] B0=
+     0
+     1
+
+[Generator] C0=
+     1     0
+
+[Generator] D0=
+     0
+
+[Generator] numerator_0= [0 0 1]
+[Generator] denominator_0= [1 1.4 1]
+[Generator] Transfer function p0_z:
+{使い方によるエラー <a href="matlab:matlab.internal.language.introspective.errorDocCallback('char')" style="font-weight:bold">char</a>
+tf から char に変換できません。
+
+エラー: <a href="matlab:matlab.internal.language.introspective.errorDocCallback('code_simu_continuous_simplified', '\\192.168.100.2\public\IDS_home\2025\mine\参考研究\gao 連続化\code_simu_continuous_simplified.m', 70)" style="font-weight:bold">code_simu_continuous_simplified</a> (<a href="matlab: opentoline('\\192.168.100.2\public\IDS_home\2025\mine\参考研究\gao 連続化\code_simu_continuous_simplified.m',70,0)">行 70</a>)
+fprintf('  %s\n', char(p0_z));
+} 
+code_simu_continuous_simplified

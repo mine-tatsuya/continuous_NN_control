@@ -1,8 +1,8 @@
 clear
 close all
 %sampletime = 0.05;
-time = 5000000;
-ts = 1;
+time = 400;
+ts = 0.05;
 z = tf('z', ts);
 
 %% 随机的u(t)输入
