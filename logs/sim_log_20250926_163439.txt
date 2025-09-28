@@ -1,0 +1,152 @@
+=== Simulation Log (20250926_163439) ===
+
+[Generator] A0=
+         0    1.0000
+   -1.0000   -1.4000
+
+[Generator] B0=
+     0
+     1
+
+[Generator] C0=
+     1     0
+
+[Generator] D0=
+     0
+
+[Generator] Transfer function (p0_z):
+  <a href="matlab:helpPopup tf" style="font-weight:bold">tf</a> のプロパティ:
+
+       Numerator: {[0 0 1]}
+     Denominator: {[1 1.4000 1]}
+        Variable: 'z'
+         IODelay: 0
+      InputDelay: 0
+     OutputDelay: 0
+              Ts: 0.0050
+        TimeUnit: 'seconds'
+       InputName: {''}
+       InputUnit: {''}
+      InputGroup: [1×1 struct]
+      OutputName: {''}
+      OutputUnit: {''}
+     OutputGroup: [1×1 struct]
+           Notes: [0×1 string]
+        UserData: []
+            Name: ''
+    SamplingGrid: [1×1 struct]
+
+
+[Plant] A=
+    -1     0
+     0    -2
+
+[Plant] B=
+     1
+     0
+
+[Plant] C=
+     1     1
+
+[Plant] D=
+     0
+
+[Plant] Transfer function (p_s):
+  <a href="matlab:helpPopup tf" style="font-weight:bold">tf</a> のプロパティ:
+
+       Numerator: {[0 1]}
+     Denominator: {[1 1]}
+        Variable: 's'
+         IODelay: 0
+      InputDelay: 0
+     OutputDelay: 0
+              Ts: 0
+        TimeUnit: 'seconds'
+       InputName: {''}
+       InputUnit: {''}
+      InputGroup: [1×1 struct]
+      OutputName: {''}
+      OutputUnit: {''}
+     OutputGroup: [1×1 struct]
+           Notes: [0×1 string]
+        UserData: []
+            Name: ''
+    SamplingGrid: [1×1 struct]
+
+
+[ASPR Model] A_aspr= -1
+[ASPR Model] B_aspr= 1
+[ASPR Model] C_aspr= 0.9
+[ASPR Model] D_aspr= 0.1
+[ASPR Model] Transfer function (p_aspr_s):
+  <a href="matlab:helpPopup tf" style="font-weight:bold">tf</a> のプロパティ:
+
+       Numerator: {[0.1000 1]}
+     Denominator: {[1 1]}
+        Variable: 's'
+         IODelay: 0
+      InputDelay: 0
+     OutputDelay: 0
+              Ts: 0
+        TimeUnit: 'seconds'
+       InputName: {''}
+       InputUnit: {''}
+      InputGroup: [1×1 struct]
+      OutputName: {''}
+      OutputUnit: {''}
+     OutputGroup: [1×1 struct]
+           Notes: [0×1 string]
+        UserData: []
+            Name: ''
+    SamplingGrid: [1×1 struct]
+
+
+[PFC] AA=
+    -1     0     0
+     0    -1     0
+     0     0    -2
+
+[PFC] BB=
+     1
+     1
+     0
+
+[PFC] CC=
+    0.9000   -1.0000   -1.0000
+
+[PFC] DD=
+    0.1000
+
+[PFC] Transfer function (p_pfc_s):
+  <a href="matlab:helpPopup tf" style="font-weight:bold">tf</a> のプロパティ:
+
+       Numerator: {[0.1000 0.1000 2.2062e-16]}
+     Denominator: {[1 2 1]}
+        Variable: 's'
+         IODelay: 0
+      InputDelay: 0
+     OutputDelay: 0
+              Ts: 0
+        TimeUnit: 'seconds'
+       InputName: {''}
+       InputUnit: {''}
+      InputGroup: [1×1 struct]
+      OutputName: {''}
+      OutputUnit: {''}
+     OutputGroup: [1×1 struct]
+           Notes: [0×1 string]
+        UserData: []
+            Name: ''
+    SamplingGrid: [1×1 struct]
+
+{使い方によるエラー <a href="matlab:matlab.internal.language.introspective.errorDocCallback('code_simu_continuous_simplified')" style="font-weight:bold">code_simu_continuous_simplified</a>
+<a href="matlab:Simulink.ID.hilite('fin_simu_continuous:88')">MATLAB Function4</a> は、ブロックが連続サンプル時間を指定または継承するときに無効である構造を使用していま
+す。無効な構造には、グローバル変数の使用、初期化された永続変数への書き込み、エクスポートした関数の呼び出し、ま
+たは coder.extrinsic の使用が含まれます。永続変数のヘルプについては、<a href="matlab:sfhelp('initialize_persistent_variables')">ドキュメンテーション</a>を参照してくださ
+い。
+推奨アクション:
+    • モデルで最速の離散レートを継承するようにこのブロックのサンプル レートを設定する。 - <a href="matlab:sfprivate('set_sample_time_to_fastest_discrete_rate', 1944)">修正</a>
+    • このブロックのプロパティ ダイアログを開き、サンプル時間を手動で設定する。 - <a href="matlab:sfprivate('open_chart_properties', 1944)">開く</a>
+} 
+Simulink.ID.hilite('fin_simu_continuous:88')
+code_simu_continuous_simplified
