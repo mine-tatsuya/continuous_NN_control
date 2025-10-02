@@ -64,6 +64,7 @@ class LastBatchLossLogger(Callback):
     def on_epoch_end(self, epoch, logs=None):
         self.val_losses.append(float(logs.get('val_loss', np.nan)))
 
+#Mでバッチサイズを設定
 M = 32
 steps_per_epoch = int(np.ceil(len(X_tr)/M))
 logger_adam = LastBatchLossLogger(steps_per_epoch)

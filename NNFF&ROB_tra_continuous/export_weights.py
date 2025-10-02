@@ -13,8 +13,8 @@ for i, layer in enumerate(model.layers):
         w, b = weights
         
         # 出力先（親フォルダの NNFF&ROB_tra/）
-        w_path = f'../NNFF&ROB_tra/z2_weights_layer_{i}.csv'
-        b_path = f'../NNFF&ROB_tra/z2_biases_layer_{i}.csv'
+        w_path = f'../NNFF&ROB_tra_continuous/z2_weights_layer_{i}.csv'
+        b_path = f'../NNFF&ROB_tra_continuous/z2_biases_layer_{i}.csv'
         
         # CSV保存
         np.savetxt(w_path, w, delimiter=',')
