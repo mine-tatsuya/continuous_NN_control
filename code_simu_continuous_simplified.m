@@ -15,15 +15,12 @@ clear
 close all
 
 time = 400; % 総実行時間
-ts = 0.005; % 離散サンプリング時間
+Td = 0.001; % 離散サンプリング時間
 
 omega = 3.14159265*5; % 外乱が正弦波の時の角周波数
 wav = 0.7; % 正弦波またはランダムステップでの外乱の振幅
 
-% 連続系設計のため、離散用のzは不要
-
-rho = 0.5; % ロバストパラメータ"ρ"
-sig = 0.001; % ロバストパラメータ"τ"
+rho =0.5; % ロバストパラメータ"ρ"
 
 %% ログ設定（テキスト + MAT）
 if ~exist('logs', 'dir')
@@ -38,8 +35,8 @@ fprintf('=== Simulation Log (%s) ===\n', timestamp);
 
 %% 適応制御器内部パラメータ
 
-sigma = 0.01; % 誤差重みe - 適応法則のパラメータ"σ"
-gamma = 100000; % 前位重み1 - 適応法則のパラメータ"γ"
+sigma = 0.1; % 誤差重みe - 適応法則のパラメータ"σ"
+gamma = 10; % 前位重み1 - 適応法則のパラメータ"γ"
 
 %% ランダムなr(t)入力 - 真の入力信号の源となるランダムステップ信号
 
@@ -53,19 +50,61 @@ sam_time = 40; % 入力切り替え周期 - ランダム入力がサンプルを
 % 安定な2次システム（減衰振動）に変更
 % 伝達関数: G(s) = 1/(s^2 + 2*0.7*s + 1) = 1/(s^2 + 1.4s + 1)
 % 減衰比: ζ = 0.7, 固有角周波数: ωn = 1 rad/s
+% 連続系として定義
 A0 = [0, 1; -1, -1.4];
 B0 = [0; 1];
 C0 = [1, 0];
 D0 = [0];
 [numerator_0, denominator_0] = ss2tf(A0, B0, C0, D0);
-p0_z = tf(numerator_0, denominator_0, ts);
+p0_s = tf(numerator_0, denominator_0); % 連続系
 fprintf('\n[Generator] A0=\n'); disp(A0);
 fprintf('[Generator] B0=\n'); disp(B0);
 fprintf('[Generator] C0=\n'); disp(C0);
 fprintf('[Generator] D0=\n'); disp(D0);
-fprintf('[Generator] Transfer function (p0_z):\n');
-fprintf('%s', evalc('disp(p0_z)'));
+fprintf('[Generator] Transfer function (p0_s - continuous):\n');
+fprintf('%s', evalc('disp(p0_s)'));
 
+%% ========== 連続系用パラメータ（fin_simu_continuous.slx用） ==========
+%% code_simu.mから連続系パラメータを使用
+
+%% 連続系プラント（code_simu.mの連続時間制御対象）
+AT = [0, 1; -9, -1.2];
+BT = [0; 1];
+CT = [22.5, 9];
+DT = 0;
+[numerator_T, denominator_T] = ss2tf(AT, BT, CT, DT);
+p_s = tf(numerator_T, denominator_T); % 連続系プラント伝達関数
+fprintf('\n[Continuous Plant] AT=\n'); disp(AT);
+fprintf('[Continuous Plant] BT=\n'); disp(BT);
+fprintf('[Continuous Plant] CT=\n'); disp(CT);
+fprintf('[Continuous Plant] DT=\n'); disp(DT);
+fprintf('[Continuous Plant] Transfer function (p_s):\n');
+fprintf('%s', evalc('disp(p_s)'));
+
+%% 連続系ASPRモデル（連続系プラントをベースに設計）
+% 簡易的なASPRモデル: 1次系 G_aspr(s) = (0.1s + 1)/(s + 1)
+num_aspr_s = [0.1, 1];
+den_aspr_s = [1, 1];
+p_aspr_s = tf(num_aspr_s, den_aspr_s);
+[num_aspr_s_d, den_aspr_s_d] = tfdata(p_aspr_s, 'V');
+[A_aspr_s, B_aspr_s, C_aspr_s, D_aspr_s] = tf2ss(num_aspr_s_d, den_aspr_s_d);
+fprintf('\n[Continuous ASPR Model] A_aspr_s=\n'); disp(A_aspr_s);
+fprintf('[Continuous ASPR Model] B_aspr_s=\n'); disp(B_aspr_s);
+fprintf('[Continuous ASPR Model] C_aspr_s=\n'); disp(C_aspr_s);
+fprintf('[Continuous ASPR Model] D_aspr_s=\n'); disp(D_aspr_s);
+fprintf('[Continuous ASPR Model] Transfer function (p_aspr_s):\n');
+fprintf('%s', evalc('disp(p_aspr_s)'));
+
+%% 連続系PFCモデル（ASPR - プラント）
+p_pfc_s = p_aspr_s - p_s;
+[num_pfc_s_d, den_pfc_s_d] = tfdata(p_pfc_s, 'V');
+[AA_s, BB_s, CC_s, DD_s] = tf2ss(num_pfc_s_d, den_pfc_s_d);
+fprintf('\n[Continuous PFC Model] AA_s=\n'); disp(AA_s);
+fprintf('[Continuous PFC Model] BB_s=\n'); disp(BB_s);
+fprintf('[Continuous PFC Model] CC_s=\n'); disp(CC_s);
+fprintf('[Continuous PFC Model] DD_s=\n'); disp(DD_s);
+fprintf('[Continuous PFC Model] Transfer function (p_pfc_s):\n');
+fprintf('%s', evalc('disp(p_pfc_s)'));
 
 %% ニューラルネットワークパラメータ読み取りと疑似チェーンモデル実行の呼び出し - 操作ボード
 
