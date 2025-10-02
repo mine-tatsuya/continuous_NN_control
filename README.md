@@ -133,11 +133,11 @@ pip install -r requirements.txt
 ### 全体のワークフロー
 
 ```
-[ステップ1] データ生成（MATLAB）
+[ステップ1] データ生成（MATLAB）(slxファイルはMATLAB2022aを用いて作成されています。)
     ↓
 [ステップ2] NN訓練（Python）
     ↓
-[ステップ3] シミュレーション実行（MATLAB）
+[ステップ3] シミュレーション実行（MATLAB）(slxファイルはMATLAB2022aを用いて作成されています。)
 ```
 
 ---
