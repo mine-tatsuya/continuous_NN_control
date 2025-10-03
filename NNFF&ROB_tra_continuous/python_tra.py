@@ -41,6 +41,25 @@ X_tr, y_tr = X[:i_tr], y[:i_tr]
 X_va, y_va = X[i_tr:i_va], y[i_tr:i_va]
 X_te, y_te = X[i_va:], y[i_va:]
 
+# ===== 2.5) 入力標準化（学習データ統計でfit） =====
+x_mean = X_tr.mean(axis=0)
+x_std = X_tr.std(axis=0)
+x_std_safe = np.where(x_std == 0, 1.0, x_std)
+
+X_tr = (X_tr - x_mean) / x_std_safe
+X_va = (X_va - x_mean) / x_std_safe
+X_te = (X_te - x_mean) / x_std_safe
+
+# 標準化パラメータをCSV保存（結果フォルダ）
+std_df = pd.DataFrame({
+    'feature': x_cols,
+    'mean': x_mean,
+    'std': x_std_safe
+})
+std_csv_path = result_dir / 'standardize_X_params.csv'
+std_df.to_csv(std_csv_path, index=False)
+print(f'[INFO] Saved standardization params to: {std_csv_path}')
+
 # ===== 3) モデル =====
 model = Sequential([
     Dense(30, input_dim=X_tr.shape[1], activation='relu'),
