@@ -110,6 +110,9 @@ python -m venv venv
 
 # 仮想環境を有効化
 .\venv\Scripts\Activate.ps1
+
+もしエラーがでたら
+（Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process）
 ```
 
 **注意**: 初回実行時に「信頼されていない発行元」と表示された場合は **[A] 常に実行する** を選択してください。

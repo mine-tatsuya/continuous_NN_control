@@ -1,14 +1,31 @@
-%% ニューラルネットワークの重みとバイアスを読み取り、前馈制御に使用
+% ===== ここだけ変更してください =====
+nn_folder = 'result_NNFF&ROB\20251003_010041';
+% ====================================
 
-w0 = readmatrix('result_NNFF&ROB\\z2_weights_layer_0.csv','Range','A1:AD4');
-% wei1 = transpose(wei1);
-b0 = readmatrix('NNFF&ROB_tra_continuous\z2_biases_layer_0.csv','Range','A1:A30');
-w1 = readmatrix('NNFF&ROB_tra_continuous\z2_weights_layer_1.csv','Range','A1:T30');
-% wei2 = transpose(wei2);
-b1 = readmatrix('NNFF&ROB_tra_continuous\z2_biases_layer_1.csv','Range','A1:A20');
-w2 = readmatrix('NNFF&ROB_tra_continuous\z2_weights_layer_2.csv','Range','A1:J20');
-% wei3 = transpose(wei3);
-b2 = readmatrix('NNFF&ROB_tra_continuous\z2_biases_layer_2.csv','Range','A1:A10');
-w3 = readmatrix('NNFF&ROB_tra_continuous\z2_weights_layer_3.csv','Range','A1:A10');
-% wei4 = transpose(wei4);
-b3 = readmatrix('NNFF&ROB_tra_continuous\z2_biases_layer_3.csv','Range','A1:A1');
+% --- 重みとバイアスの読み込み ---
+w0 = readmatrix(fullfile(nn_folder, 'z2_weights_layer_0.csv'),'Range','A1:AD4');
+b0 = readmatrix(fullfile(nn_folder, 'z2_biases_layer_0.csv'), 'Range','A1:A30');
+
+w1 = readmatrix(fullfile(nn_folder, 'z2_weights_layer_1.csv'),'Range','A1:T30');
+b1 = readmatrix(fullfile(nn_folder, 'z2_biases_layer_1.csv'), 'Range','A1:A20');
+
+w2 = readmatrix(fullfile(nn_folder, 'z2_weights_layer_2.csv'),'Range','A1:J20');
+b2 = readmatrix(fullfile(nn_folder, 'z2_biases_layer_2.csv'), 'Range','A1:A10');
+
+w3 = readmatrix(fullfile(nn_folder, 'z2_weights_layer_3.csv'),'Range','A1:A10');
+b3 = readmatrix(fullfile(nn_folder, 'z2_biases_layer_3.csv'), 'Range','A1:A1');
+
+% --- 学習時に保存した標準化パラメータの読み込み ---
+Tstd = readtable(fullfile(nn_folder, 'standardize_X_params.csv')); 
+% 期待する列順に並び替え（安全のため）
+need = {'y','yd','ydd','yddd'};
+[ok, idx] = ismember(need, Tstd.feature);
+if ~all(ok)
+    error('standardize_X_params.csv に必要な特徴 %s が見つかりません。', strjoin(need(~ok), ', '));
+end
+mu  = Tstd.mean(idx);       % 4x1 の平均
+sig = Tstd.std(idx);        % 4x1 の標準偏差
+% 学習側で0→1に置換済みだが、念のため安全策
+sig(sig==0) = 1;
+
+% これで mu, sig, w0..w3, b0..b3 がワークスペースにあります

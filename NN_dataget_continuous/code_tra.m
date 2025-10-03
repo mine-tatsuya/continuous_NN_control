@@ -1,6 +1,6 @@
 clear
 close all
-time = 800;
+time = 2000;
 Td = 0.001;
 Ts_log = 0.001;
 
@@ -8,7 +8,9 @@ Ts_log = 0.001;
 seed = randi(2^31-2);     % 毎回違うSeed;
 ran_min = 5;
 ran_max = 20;
-sam_time = 40; % 入力切替周期
+sam_time = 20; % 入力切替周期
+wav = 0.7;
+dis_sam_time = 29;
 
 %% 初期信号生成器
 numerator_0 = 1;
