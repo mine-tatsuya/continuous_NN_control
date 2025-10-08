@@ -1,31 +1,37 @@
 % ===== ここだけ変更してください =====
-nn_folder = 'result_NNFF&ROB\20251003_011629';
+nn_folder = 'result_NNFF&ROB\20251008_122121';
 % ====================================
 
-% --- 重みとバイアスの読み込み ---
-w0 = readmatrix(fullfile(nn_folder, 'z2_weights_layer_0.csv'),'Range','A1:AD4');
-b0 = readmatrix(fullfile(nn_folder, 'z2_biases_layer_0.csv'), 'Range','A1:A30');
+% --- 重みとバイアス（64-64-1構成）を「自動サイズで」読み込み ---
+w0 = readmatrix(fullfile(nn_folder, 'z2_weights_layer_0.csv')); w0 = w0(~all(isnan(w0),2), ~all(isnan(w0),1));  % [4x64]
+b0 = readmatrix(fullfile(nn_folder, 'z2_biases_layer_0.csv'));  b0 = b0(~all(isnan(b0),2), :);                 % [64x1]
 
-w1 = readmatrix(fullfile(nn_folder, 'z2_weights_layer_1.csv'),'Range','A1:T30');
-b1 = readmatrix(fullfile(nn_folder, 'z2_biases_layer_1.csv'), 'Range','A1:A20');
+w1 = readmatrix(fullfile(nn_folder, 'z2_weights_layer_1.csv')); w1 = w1(~all(isnan(w1),2), ~all(isnan(w1),1));  % [64x64]
+b1 = readmatrix(fullfile(nn_folder, 'z2_biases_layer_1.csv'));  b1 = b1(~all(isnan(b1),2), :);                 % [64x1]
 
-w2 = readmatrix(fullfile(nn_folder, 'z2_weights_layer_2.csv'),'Range','A1:J20');
-b2 = readmatrix(fullfile(nn_folder, 'z2_biases_layer_2.csv'), 'Range','A1:A10');
+w2 = readmatrix(fullfile(nn_folder, 'z2_weights_layer_2.csv')); w2 = w2(~all(isnan(w2),2), :);                  % [64x1]
+b2 = readmatrix(fullfile(nn_folder, 'z2_biases_layer_2.csv'));  b2 = b2(1);                                     % [1x1]
 
-w3 = readmatrix(fullfile(nn_folder, 'z2_weights_layer_3.csv'),'Range','A1:A10');
-b3 = readmatrix(fullfile(nn_folder, 'z2_biases_layer_3.csv'), 'Range','A1:A1');
+% --- 形の検証（念のため） ---
+assert(all(size(w0)==[4,64]) && numel(b0)==64, 'layer0 shape mismatch');
+assert(all(size(w1)==[64,64]) && numel(b1)==64, 'layer1 shape mismatch');
+assert(all(size(w2)==[64,1])  && numel(b2)==1,  'layer2 shape mismatch');
 
-% --- 学習時に保存した標準化パラメータの読み込み ---
+% --- 入力Xの標準化パラメータ（mu_x/sig_x という名前で用意） ---
 Tstd = readtable(fullfile(nn_folder, 'standardize_X_params.csv')); 
-% 期待する列順に並び替え（安全のため）
 need = {'y','yd','ydd','yddd'};
 [ok, idx] = ismember(need, Tstd.feature);
 if ~all(ok)
     error('standardize_X_params.csv に必要な特徴 %s が見つかりません。', strjoin(need(~ok), ', '));
 end
-mu  = Tstd.mean(idx);       % 4x1 の平均
-sig = Tstd.std(idx);        % 4x1 の標準偏差
-% 学習側で0→1に置換済みだが、念のため安全策
-sig(sig==0) = 1;
+mu_x  = Tstd.mean(idx);   mu_x  = mu_x(:);   % [4x1]
+sig_x = Tstd.std(idx);    sig_x = sig_x(:);  % [4x1]
+sig_x(sig_x==0) = 1;  % 念のため
 
-% これで mu, sig, w0..w3, b0..b3 がワークスペースにあります
+% --- 出力(=r) 側の標準化パラメータ（mu_y/sig_y という名前で用意） ---
+Ty   = readtable(fullfile(nn_folder, 'standardize_y_params.csv')); % columns: target, mean, std
+mu_y  = Ty.mean(1);
+sig_y = Ty.std(1);
+if sig_y == 0, sig_y = 1; end
+
+disp('>> NN params loaded: w0,b0,w1,b1,w2,b2, mu_x,sig_x, mu_y,sig_y');

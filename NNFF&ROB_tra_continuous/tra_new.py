@@ -130,7 +130,7 @@ early_adam = callbacks.EarlyStopping(
     monitor='val_loss', patience=20, restore_best_weights=True, verbose=0
 )
 
-BATCH_SIZE = 32  # ここは環境に合わせてOK（大きめで高速になることが多い）
+BATCH_SIZE = 64  # ここは環境に合わせてOK（大きめで高速になることが多い）
 EPOCHS_ADAM = 1000
 
 print('\n[INFO] === AdamW phase ===')
@@ -145,8 +145,11 @@ history_adam = model.fit(
 )
 
 # AdamWベストでのVal評価（標準化空間）
-adam_val = model.evaluate(X_va_s, y_va_s, verbose=0)
-print(f'[INFO] AdamW best (val) -> loss: {adam_val:.6f}')
+adam_val = model.evaluate(X_va_s, y_va_s, verbose=0)  # -> [loss, mae]
+adam_val_loss = adam_val[0]
+adam_val_mae  = adam_val[1] if len(adam_val) > 1 else float('nan')
+print(f'[INFO] AdamW best (val) -> loss: {adam_val_loss:.6f}, mae: {adam_val_mae:.6f}')
+
 
 # ===== 7) SGD(M) 段階に引き継ぎ =====
 # ベストAdamW重みをロード
