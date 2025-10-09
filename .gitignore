@@ -1,6 +1,7 @@
 logs
 venv
-NN_dataget_continuous/dataget*
 .venv_tf
 result_NNFF&ROB
 result_NNPFC
+NN_dataget_continuous/dataget.csv
+NN_dataget_continuous/dataget.mat

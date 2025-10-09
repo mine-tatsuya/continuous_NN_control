@@ -411,9 +411,13 @@ py -3.10 -m venv .venv_tf
 .\.venv_tf\Scripts\Activate.ps1   # 有効化
 もしできない場合
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-cd '.\continuous_NN_control\NNFF&ROB_tra_continuous\'
+
 cd '.\NNFF&ROB_tra_continuous\'
+cd '.\NNPFC_tra_continuous\'
+
 pip uninstall -y tensorflow keras keras-nightly tf-nightly
 python -m pip install --upgrade pip
 pip install "tensorflow==2.10.1" "numpy==1.23.5" pandas
+
 python python_tra.py
+python tra_new.py

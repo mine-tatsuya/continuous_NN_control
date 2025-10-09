@@ -106,7 +106,7 @@ sam_time = 40; % 入力切り替え周期 - ランダム入力がサンプルを
 
 getNN_simu; % NNFFまたはNNROBの行列パラメータを取得
 %getPFC_simu; % NNPFCのパラメータを取得
-sim("fin_simu_continuous.slx"); % 最終実行
+sim("fin_simu_continuous_1.slx"); % 最終実行
 
 %% ログ保存と終了処理
 %save(log_mat);
