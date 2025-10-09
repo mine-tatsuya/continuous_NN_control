@@ -5,3 +5,5 @@ result_NNFF&ROB
 result_NNPFC
 NN_dataget_continuous/dataget.csv
 NN_dataget_continuous/dataget.mat
+NN_dataget_continuous/dataget_PFC.csv
+NN_dataget_continuous/dataget_PFC.mat
