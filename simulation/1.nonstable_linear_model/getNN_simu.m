@@ -1,6 +1,11 @@
 % ===== ここだけ変更してください =====
-nn_folder = 'result_NNFF&ROB\20251008_122121';
+timestamp_folder = '20251008_160631';  % 使用するタイムスタンプフォルダ
 % ====================================
+
+% スクリプトの場所を基準にプロジェクトルートを取得
+script_path = fileparts(mfilename('fullpath'));  % getNN_simu.mのあるフォルダ
+project_root = fullfile(script_path, '..', '..');  % プロジェクトルート
+nn_folder = fullfile(project_root, 'result_NNFF&ROB', timestamp_folder);
 
 % --- 重みとバイアス（64-64-1構成）を「自動サイズで」読み込み ---
 w0 = readmatrix(fullfile(nn_folder, 'z2_weights_layer_0.csv')); w0 = w0(~all(isnan(w0),2), ~all(isnan(w0),1));  % [4x64]
